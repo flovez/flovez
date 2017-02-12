@@ -11,83 +11,20 @@
         registerEvents();
       });
 
-      var isMouseDown = false;
-      var isHighlighted;
-
-      var startCell;
-      var currentCell;
-
       function init() {
         buildTable(<%= squareSize %>);
       }
 
       function registerEvents() {
+        $("#board td").on('click', function () {
+          cell = getCellPosition($(this));
 
-        $("#our_table td").on('mousedown', function () {
+          $("#"+cell.row+"_"+cell.col).css("background-color", "<%= player.team.color %>");
 
-          isMouseDown = true;
-
-          startCell = getCellPosition($(this));
-
-          highlightCells(startCell, startCell);
-
-          //$(this).toggleClass("highlighted");
-          //isHighlighted = $(this).hasClass("highlighted");
-
+          console.log(cell);
           return false; // prevent text selection
-
-        }).on('mouseover', function () {
-
-          if (isMouseDown) {
-
-            currentCell = getCellPosition($(this));
-
-            highlightCells(startCell, currentCell);
-
-            //$(this).toggleClass("highlighted", isHighlighted);
-          }
-
-        }).on('selectstart', function () {
-          return false;
         });
-
-
-        $(document).mouseup(function () {
-           isMouseDown = false;
-        });
-
       }
-
-
-
-
-      function highlightCells(start, end) {
-
-        var fromRow = Math.min(start.row, end.row);
-        var toRow = Math.max(start.row, end.row);
-
-        var fromCol = Math.min(start.col, end.col);
-        var toCol = Math.max(start.col, end.col);
-
-
-        console.log('fromRow ' + fromRow + ' toRow ' + toRow);
-        console.log('fromCol ' + fromCol + ' toCol ' + toCol);
-
-
-        clearHighlight();
-
-        for (i = fromRow; i <= toRow; i++) {
-          for (j = fromCol; j <= toCol; j++) {
-            $('td[data-row="' + i + '"][data-col="' + j + '"]').addClass('highlighted');
-          }
-
-        }
-      }
-
-      function clearHighlight() {
-        $('td').removeClass('highlighted');
-      }
-
 
       function getCellPosition($cell) {
         var cell = {
@@ -99,11 +36,11 @@
       }
 
       function buildTable(size) {
-        var tableHtml = '<table class="box" cellpadding="0" cellspacing="0" id="our_table">';
+        var tableHtml = '<table class="box" cellpadding="0" cellspacing="0" id="board">';
         for (i = 0; i < size; i++) {
           tableHtml += '<tr>';
           for (j = 0; j < size; j++) {
-            tableHtml += '<td data-row="' + i + '" data-col="' + j + '">[' + i + ',' + j + ']</td>';
+            tableHtml += '<td id="'+ i + '_' + j +'" data-row="' + i + '" data-col="' + j + '">[' + i + ',' + j + ']</td>';
           }
           tableHtml += '</tr>';
         }
@@ -114,8 +51,9 @@
     </script>
   </head>
   <body>
-      <div class="Absolute-Center is-Resizable">
-        <div class="game-wrapper"></div>
-      </div>
+    <div align="center" style="color: <%= player.team.color%>">
+      <h1><%= player.name +" ("+ player.team.name %>)</h1>
+    </div>
+    <div class="game-wrapper"></div>
   </body>
 </html>
