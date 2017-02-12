@@ -1,13 +1,10 @@
-table td {
+.cell {
   width:50px;
   height:80px;
   text-align:center;
   vertical-align:middle;
   background-color:#ccc;
   border:1px solid #fff;
-}
-table td.highlighted {
-  background-color:#999;
 }
 
 .box {

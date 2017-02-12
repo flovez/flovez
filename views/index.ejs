@@ -9,13 +9,14 @@
 
       var socket = io();
       var currentPlayer = null;
+      var allPlayers = null;
 
       $(document).ready(function () {
         registerEvents();
       });
 
       function registerEvents() {
-        socket.on('init', function(player, boardConfig, board){
+        socket.on('init', function(player, boardConfig, board, players){
           if(currentPlayer === null){
             currentPlayer = player;
           }
@@ -25,15 +26,18 @@
 
           $("#board td").on('click', function () {
             cell = getCellPosition($(this));
-            socket.emit('cell_click', cell, currentPlayer.team.color);
-            console.log(cell);
+            socket.emit('cell_click', cell, currentPlayer);
             return false;
           });
 
+          console.log(players);
+          updateLeadBoard(players);
+
         });
 
-        socket.on('cell_click', function(cell, teamColor){
-          $("#"+cell.row+"_"+cell.col).css("background-color", teamColor);
+        socket.on('cell_click', function(cell, player, players){
+          $("#"+cell.row+"_"+cell.col).css("background-color", player.team.color);
+          updateLeadBoard(players);
         });
       }
 
@@ -46,12 +50,21 @@
         return cell;
       }
 
+      function updateLeadBoard(players){
+        $('#leadboard').empty();
+        players.forEach(function(player){
+          if(player !== null){
+            $('#leadboard').append('<tr><td>'+player.name+'</td><td>'+player.score+'</td></tr>');
+          }
+        });
+      }
+
       function buildTable(size, board) {
         var tableHtml = '<table class="box" cellpadding="0" cellspacing="0" id="board">';
         for (row = 0; row < size; row++) {
           tableHtml += '<tr>';
           for (col = 0; col < size; col++) {
-            tableHtml += '<td style="background-color: '+board[row][col]+'" id="'+ row + '_' + col +'" data-row="' + row + '" data-col="' + col + '"></td>';
+            tableHtml += '<td class="cell" style="background-color: '+board[row][col]+'" id="'+ row + '_' + col +'" data-row="' + row + '" data-col="' + col + '"></td>';
           }
           tableHtml += '</tr>';
         }
@@ -66,5 +79,10 @@
     <div class="container" align="center">
     </div>
     <div class="game-wrapper"></div>
+    <div class="leadboard" align="center">
+      <h2>Leadboard</h2>
+      <table id="leadboard">
+      </table>
+    </div>
   </body>
 </html>

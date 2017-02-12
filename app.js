@@ -77,6 +77,7 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 var playerCount = 0;
 var board = [];
+var players = [];
 
 for(var row = 0; row < boardConfig.boardSize; row ++){
     board[row] = [];
@@ -88,15 +89,25 @@ for(var row = 0; row < boardConfig.boardSize; row ++){
 io.sockets.on('connection', function (socket) {
     playerCount++;
     console.log('Total ' + playerCount + ' connected!');
-    socket.on('cell_click', function (cell, teamColor) {
-        board[cell.row][cell.col] = teamColor;
-        io.emit('cell_click', cell, teamColor);
-    });
     var player = {
+        "id": playerCount,
         "name": "Player" + playerCount,
-        "team": TEAMS[randomIntFromInterval(0, 2)]
+        "team": TEAMS[randomIntFromInterval(0, 2)],
+        "score":0
     };
-    io.emit('init', player, boardConfig, board);
+
+    players[player.id] = player;
+
+    socket.on('cell_click', function (cell, player) {
+        board[cell.row][cell.col] = player.team.color;
+        temp = players[player.id];
+        if(temp !== undefined){
+            temp.score++;
+            players[player.id] = temp;
+        }
+        io.emit('cell_click', cell, player, players);
+    });
+    io.emit('init', player, boardConfig, board, players);
 });
 
 module.exports = {
