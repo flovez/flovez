@@ -8,22 +8,28 @@
     <script type="text/javascript">
 
       var socket = io();
+      var currentPlayer = null;
 
       $(document).ready(function () {
-        init();
         registerEvents();
       });
 
-      function init() {
-        buildTable(<%= squareSize %>);
-      }
-
       function registerEvents() {
-        $("#board td").on('click', function () {
-          cell = getCellPosition($(this));
-          socket.emit('cell_click', cell, "<%= player.team.color %>");
-          console.log(cell);
-          return false;
+        socket.on('init', function(player, boardConfig, board){
+          if(currentPlayer === null){
+            currentPlayer = player;
+          }
+          buildTable(boardConfig.boardSize, board);
+          $(".container").css("color", currentPlayer.team.color);
+          $(".container").html("<h1>"+ currentPlayer.name+"</h1>");
+
+          $("#board td").on('click', function () {
+            cell = getCellPosition($(this));
+            socket.emit('cell_click', cell, currentPlayer.team.color);
+            console.log(cell);
+            return false;
+          });
+
         });
 
         socket.on('cell_click', function(cell, teamColor){
@@ -40,12 +46,12 @@
         return cell;
       }
 
-      function buildTable(size) {
+      function buildTable(size, board) {
         var tableHtml = '<table class="box" cellpadding="0" cellspacing="0" id="board">';
-        for (i = 0; i < size; i++) {
+        for (row = 0; row < size; row++) {
           tableHtml += '<tr>';
-          for (j = 0; j < size; j++) {
-            tableHtml += '<td id="'+ i + '_' + j +'" data-row="' + i + '" data-col="' + j + '">[' + i + ',' + j + ']</td>';
+          for (col = 0; col < size; col++) {
+            tableHtml += '<td style="background-color: '+board[row][col]+'" id="'+ row + '_' + col +'" data-row="' + row + '" data-col="' + col + '"></td>';
           }
           tableHtml += '</tr>';
         }
@@ -57,8 +63,7 @@
 
   </head>
   <body>
-    <div align="center" style="color: <%= player.team.color%>">
-      <h1><%= player.name +" ("+ player.team.name %>)</h1>
+    <div class="container" align="center">
     </div>
     <div class="game-wrapper"></div>
   </body>
