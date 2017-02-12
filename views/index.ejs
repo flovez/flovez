@@ -4,7 +4,10 @@
     <title>SquareGame</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
+
+      var socket = io();
 
       $(document).ready(function () {
         init();
@@ -18,11 +21,13 @@
       function registerEvents() {
         $("#board td").on('click', function () {
           cell = getCellPosition($(this));
-
-          $("#"+cell.row+"_"+cell.col).css("background-color", "<%= player.team.color %>");
-
+          socket.emit('cell_click', cell, "<%= player.team.color %>");
           console.log(cell);
-          return false; // prevent text selection
+          return false;
+        });
+
+        socket.on('cell_click', function(cell, teamColor){
+          $("#"+cell.row+"_"+cell.col).css("background-color", teamColor);
         });
       }
 
@@ -49,6 +54,7 @@
       }
 
     </script>
+
   </head>
   <body>
     <div align="center" style="color: <%= player.team.color%>">
