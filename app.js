@@ -4,13 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var index = require('./routes/index');
 var users = require('./routes/users');
-
 var app = express();
-
-
+var http = require('http');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -45,4 +42,23 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+/**
+ * Create HTTP server.
+ */
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+
+var playerCount = 0;
+
+io.sockets.on('connection', function (socket) {
+  playerCount++;
+  console.log('Total '+ playerCount +' connected!');
+  socket.on('cell_click', function(cell, teamColor){
+    io.emit('cell_click', cell, teamColor);
+  });
+});
+
+module.exports = {
+  "app": app,
+  "server": server
+};
