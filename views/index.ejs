@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SquareGame</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+      $(document).ready(function () {
+        init();
+        registerEvents();
+      });
+
+      var isMouseDown = false;
+      var isHighlighted;
+
+      var startCell;
+      var currentCell;
+
+      function init() {
+        buildTable(<%= squareSize %>);
+      }
+
+      function registerEvents() {
+
+        $("#our_table td").on('mousedown', function () {
+
+          isMouseDown = true;
+
+          startCell = getCellPosition($(this));
+
+          highlightCells(startCell, startCell);
+
+          //$(this).toggleClass("highlighted");
+          //isHighlighted = $(this).hasClass("highlighted");
+
+          return false; // prevent text selection
+
+        }).on('mouseover', function () {
+
+          if (isMouseDown) {
+
+            currentCell = getCellPosition($(this));
+
+            highlightCells(startCell, currentCell);
+
+            //$(this).toggleClass("highlighted", isHighlighted);
+          }
+
+        }).on('selectstart', function () {
+          return false;
+        });
+
+
+        $(document).mouseup(function () {
+           isMouseDown = false;
+        });
+
+      }
+
+
+
+
+      function highlightCells(start, end) {
+
+        var fromRow = Math.min(start.row, end.row);
+        var toRow = Math.max(start.row, end.row);
+
+        var fromCol = Math.min(start.col, end.col);
+        var toCol = Math.max(start.col, end.col);
+
+
+        console.log('fromRow ' + fromRow + ' toRow ' + toRow);
+        console.log('fromCol ' + fromCol + ' toCol ' + toCol);
+
+
+        clearHighlight();
+
+        for (i = fromRow; i <= toRow; i++) {
+          for (j = fromCol; j <= toCol; j++) {
+            $('td[data-row="' + i + '"][data-col="' + j + '"]').addClass('highlighted');
+          }
+
+        }
+      }
+
+      function clearHighlight() {
+        $('td').removeClass('highlighted');
+      }
+
+
+      function getCellPosition($cell) {
+        var cell = {
+          row: $cell.data('row'),
+          col: $cell.data('col')
+        };
+
+        return cell;
+      }
+
+      function buildTable(size) {
+        var tableHtml = '<table class="box" cellpadding="0" cellspacing="0" id="our_table">';
+        for (i = 0; i < size; i++) {
+          tableHtml += '<tr>';
+          for (j = 0; j < size; j++) {
+            tableHtml += '<td data-row="' + i + '" data-col="' + j + '">[' + i + ',' + j + ']</td>';
+          }
+          tableHtml += '</tr>';
+        }
+        tableHtml += '</table>';
+        $('.game-wrapper').html(tableHtml);
+      }
+
+    </script>
+  </head>
+  <body>
+      <div class="Absolute-Center is-Resizable">
+        <div class="game-wrapper"></div>
+      </div>
+  </body>
+</html>

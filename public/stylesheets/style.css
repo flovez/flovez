@@ -1,0 +1,18 @@
+table td {
+  width:100px;
+  height:100px;
+  text-align:center;
+  vertical-align:middle;
+  background-color:#ccc;
+  border:1px solid #fff;
+}
+table td.highlighted {
+  background-color:#999;
+}
+
+.box {
+  width:90%;
+  height:90%;
+  background-color:#d9d9d9;
+  margin:0 auto;
+}
