@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var index = require('./routes/index');
-var users = require('./routes/users');
+var join = require('./routes/join');
 var app = express();
 var http = require('http');
 var boardConfig = require("./config/board.js");
@@ -22,8 +22,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/play', index);
+app.use('/', join);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -78,6 +78,8 @@ var io = require('socket.io').listen(server);
 var playerCount = 0;
 var board = [];
 var players = [];
+var playerName;
+
 
 for(var row = 0; row < boardConfig.boardSize; row ++){
     board[row] = [];
@@ -87,16 +89,21 @@ for(var row = 0; row < boardConfig.boardSize; row ++){
 }
 
 io.sockets.on('connection', function (socket) {
-    playerCount++;
-    console.log('Total ' + playerCount + ' connected!');
-    var player = {
-        "id": playerCount,
-        "name": "Player" + playerCount,
-        "team": TEAMS[randomIntFromInterval(0, 2)],
-        "score":0
-    };
 
-    players[player.id] = player;
+    socket.on('start', function (username) {
+        playerName = username;
+        playerCount++;
+        console.log('Total ' + playerCount + ' connected!');
+        var player = {
+            "id": playerCount,
+            "name": playerName,
+            "team": TEAMS[randomIntFromInterval(0, 2)],
+            "score":0
+        };
+
+        players[player.id] = player;
+        io.emit('init', player, boardConfig, board, players);
+    });
 
     socket.on('cell_click', function (cell, player) {
         board[cell.row][cell.col] = player.team.color;
@@ -107,7 +114,7 @@ io.sockets.on('connection', function (socket) {
         }
         io.emit('cell_click', cell, player, players);
     });
-    io.emit('init', player, boardConfig, board, players);
+
 });
 
 module.exports = {

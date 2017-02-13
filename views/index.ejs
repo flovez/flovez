@@ -12,6 +12,7 @@
       var allPlayers = null;
 
       $(document).ready(function () {
+        socket.emit('start', "<%= username%>");
         registerEvents();
       });
 
