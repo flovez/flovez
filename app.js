@@ -94,7 +94,7 @@ for(var row = 0; row < boardConfig.boardSize; row ++){
 io.sockets.on('connection', function (socket) {
 
     socket.on('start', function (username) {
-        playerName = username;
+        playerName = username.slice(0, 15);
         playerCount++;
         console.log('Total ' + playerCount + ' connected!');
         var player = {
