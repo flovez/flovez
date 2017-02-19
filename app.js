@@ -84,7 +84,10 @@ var playerName;
 for(var row = 0; row < boardConfig.boardSize; row ++){
     board[row] = [];
     for(var col = 0; col < boardConfig.boardSize; col ++){
-        board[row][col]  = COLORS.black
+        board[row][col]  = {
+            color:COLORS.black,
+            fruit:false
+        };
     }
 }
 
@@ -106,13 +109,18 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('cell_click', function (cell, player) {
-        board[cell.row][cell.col] = player.team.color;
+        board[cell.row][cell.col].color = player.team.color;
         temp = players[player.id];
         if(temp !== undefined){
             temp.score++;
             players[player.id] = temp;
         }
-        io.emit('cell_click', cell, player, players);
+
+        var col = randomIntFromInterval(0, boardConfig.boardSize -1);
+        var row = randomIntFromInterval(0, boardConfig.boardSize -1);
+        board[row][col].fruit = true;
+
+        io.emit('cell_click', cell, player, players, board);
     });
 
 });

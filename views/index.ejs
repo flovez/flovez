@@ -33,13 +33,23 @@
 
           console.log(players);
           updateLeadBoard(players);
-
         });
 
-        socket.on('cell_click', function(cell, player, players){
+        socket.on('cell_click', function(cell, player, players, board){
           $("#"+cell.row+"_"+cell.col).css("background-color", player.team.color);
+          updateFruits(board);
           updateLeadBoard(players);
         });
+      }
+
+      function updateFruits(board){
+        for(var i = 0; i < board.length; i++) {
+          for(var j = 0; j < board.length; j++) {
+            if(board[i][j].fruit === true){
+              $("#"+i+"_"+j).html('<img height="100%" src="/images/apple.png" />');
+            }
+          }
+        }
       }
 
       function getCellPosition($cell) {
@@ -84,12 +94,13 @@
         for (row = 0; row < size; row++) {
           tableHtml += '<tr>';
           for (col = 0; col < size; col++) {
-            tableHtml += '<td class="cell" style="background-color: '+board[row][col]+'" id="'+ row + '_' + col +'" data-row="' + row + '" data-col="' + col + '"></td>';
+            tableHtml += '<td class="cell" style="background-color: '+board[row][col].color+'" id="'+ row + '_' + col +'" data-row="' + row + '" data-col="' + col + '"></td>';
           }
           tableHtml += '</tr>';
         }
         tableHtml += '</table>';
         $('.game-wrapper').html(tableHtml);
+        updateFruits(board);
       }
 
     </script>
