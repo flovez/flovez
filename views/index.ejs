@@ -69,9 +69,11 @@
 
       function updateLeadBoard(players){
         $('#leadboard').empty();
+        var index = 1;
         players.forEach(function(player){
           if(player !== null){
-            $('#leadboard').append('<tr><td style="color: '+player.team.color+'">'+player.name+'</td><td class="sortnr">'+player.score+'</td></tr>');
+            $('#leadboard').append('<tr><td>'+index+'</td><td style="color: '+player.team.color+'">'+player.name+'</td><td class="sortnr">'+player.score+'</td></tr>');
+            index++;
           }
         });
         sortTable();
@@ -119,7 +121,7 @@
       <hr/>
       <div class="leadboard" align="center">
         <h2>Leadboard</h2>
-        <table id="leadboard">
+        <table class="table table-striped" id="leadboard">
         </table>
       </div>
     </div>
