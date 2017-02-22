@@ -5,6 +5,7 @@
   vertical-align:middle;
   background-color: #000;
   border:1px solid #fff;
+  background-size:100% 100%;
 }
 
 .box {
@@ -12,4 +13,11 @@
   height:90%;
   background-color:#d9d9d9;
   margin:0 auto;
+}
+
+.game-wrapper{
+  width: 50vw;
+  height: 50vw;
+  text-align: center;
+  margin: auto;
 }
