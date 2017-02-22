@@ -4,6 +4,10 @@
     <title>SquareGame</title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
 
@@ -22,8 +26,8 @@
             currentPlayer = player;
           }
           buildTable(boardConfig.boardSize, board);
-          $(".container").css("color", currentPlayer.team.color);
-          $(".container").html("<h1>"+ currentPlayer.name+"</h1>");
+          $(".header").css("color", currentPlayer.team.color);
+          $(".header").html("<h1>"+ currentPlayer.name+"</h1>");
 
           $("#board td").on('click', function () {
             cell = getCellPosition($(this));
@@ -110,13 +114,14 @@
   </head>
   <body>
     <div class="container" align="center">
-    </div>
-    <div class="game-wrapper"></div>
-    <hr/>
-    <div class="leadboard" align="center">
-      <h2>Leadboard</h2>
-      <table id="leadboard">
-      </table>
+      <div class="header"></div>
+      <div class="game-wrapper"></div>
+      <hr/>
+      <div class="leadboard" align="center">
+        <h2>Leadboard</h2>
+        <table id="leadboard">
+        </table>
+      </div>
     </div>
   </body>
 </html>
