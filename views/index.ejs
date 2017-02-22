@@ -112,6 +112,7 @@
         }
         tableHtml += '</table>';
         $('.game-wrapper').html(tableHtml);
+        $(".box").height($(window).height());
         updateFruits(board);
       }
 
@@ -119,15 +120,18 @@
 
   </head>
   <body>
-    <div class="container" align="center">
-      <div class="header"></div>
+    <div class="container-full" align="center">
       <div class="game-wrapper"></div>
+
       <hr/>
+      <div class="header"></div>
       <div class="leadboard" align="center">
         <h2>Leadboard</h2>
         <table class="table table-inverse" id="leadboard">
         </table>
       </div>
+
+
     </div>
   </body>
 </html>

@@ -11,19 +11,24 @@
 }
 
 .box {
-  width:90%;
-  height:90%;
+  width:100%;
+  height:100%;
   background-color:#d9d9d9;
   margin:0 auto;
 }
 
 .game-wrapper{
-  width: 50vw;
-  height: 50vw;
+  width: 100%;
   text-align: center;
   margin: auto;
 }
 
 .leadboard{
   width: 20%;
+}
+
+.full-width-div {
+  position: absolute;
+  width: 100%;
+  left: 0;
 }
