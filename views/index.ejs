@@ -54,7 +54,7 @@
         for(var i = 0; i < board.length; i++) {
           for(var j = 0; j < board.length; j++) {
             if(board[i][j].fruit === true){
-              $("#"+i+"_"+j).css('background-image', 'url("/images/apple.png")');
+              $("#"+i+"_"+j).css('background-image', 'url("/images/fruits/'+board[i][j].fruitNumber+'.png")');
             }else {
               $("#"+i+"_"+j).css('background-image', '');
             }

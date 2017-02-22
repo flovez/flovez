@@ -87,7 +87,8 @@ for(var row = 0; row < boardConfig.boardSize; row ++){
     for(var col = 0; col < boardConfig.boardSize; col ++){
         board[row][col]  = {
             color:COLORS.black,
-            fruit:false
+            fruit:false,
+            fruitNumber:0
         };
     }
 }
@@ -127,6 +128,7 @@ io.sockets.on('connection', function (socket) {
         var col = randomIntFromInterval(0, boardConfig.boardSize -1);
         var row = randomIntFromInterval(0, boardConfig.boardSize -1);
         board[row][col].fruit = true;
+        board[row][col].fruitNumber = randomIntFromInterval(1, 7);
 
         io.emit('cell_click', cell, player, players, board);
     });
