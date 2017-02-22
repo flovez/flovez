@@ -76,7 +76,7 @@
         var index = 1;
         players.forEach(function(player){
           if(player !== null){
-            $('#leadboard').append('<tr><td>'+index+'</td><td style="color: '+player.team.color+'">'+player.name+'</td><td class="sortnr">'+player.score+'</td></tr>');
+            $('#leadboard').append('<tr><td style="color: '+player.team.color+'">'+player.name+'</td><td class="sortnr">'+player.score+'</td></tr>');
             index++;
           }
         });
