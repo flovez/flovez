@@ -109,16 +109,20 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('cell_click', function (cell, player) {
-        board[cell.row][cell.col].color = player.team.color;
 
         if(board[cell.row][cell.col].fruit === true){
             temp = players[player.id];
             if(temp !== undefined){
-                temp.score++;
+                if(board[cell.row][cell.col].color === player.team.color){
+                    temp.score = temp.score + 3;
+                }else {
+                    temp.score++;
+                }
                 players[player.id] = temp;
             }
             board[cell.row][cell.col].fruit = false;
         }
+        board[cell.row][cell.col].color = player.team.color;
         var col = randomIntFromInterval(0, boardConfig.boardSize -1);
         var row = randomIntFromInterval(0, boardConfig.boardSize -1);
         board[row][col].fruit = true;
