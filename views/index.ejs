@@ -28,19 +28,18 @@
         socket.on('init', function(player, boardConfig, board, players){
           if(currentPlayer === null){
             currentPlayer = player;
+            buildTable(boardConfig.boardSize, board);
+            $(".header").css("color", currentPlayer.team.color);
+            $(".header").html("<h1>"+ currentPlayer.name+"</h1>");
+
+            $("#board td").on('click', function () {
+              cell = getCellPosition($(this));
+              socket.emit('cell_click', cell, currentPlayer);
+              return false;
+            });
+
+            updateLeadBoard(players);
           }
-          buildTable(boardConfig.boardSize, board);
-          $(".header").css("color", currentPlayer.team.color);
-          $(".header").html("<h1>"+ currentPlayer.name+"</h1>");
-
-          $("#board td").on('click', function () {
-            cell = getCellPosition($(this));
-            socket.emit('cell_click', cell, currentPlayer);
-            return false;
-          });
-
-          console.log(players);
-          updateLeadBoard(players);
         });
 
         socket.on('cell_click', function(cell, player, players, board){
