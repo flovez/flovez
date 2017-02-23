@@ -62,21 +62,17 @@
       }
 
       function getCellPosition($cell) {
-        var cell = {
+        return {
           row: $cell.data('row'),
           col: $cell.data('col')
         };
-
-        return cell;
       }
 
       function updateLeadBoard(players){
         $('#leadboard').empty();
-        var index = 1;
         players.forEach(function(player){
           if(player !== null){
             $('#leadboard').append('<tr><td style="color: '+player.team.color+'">'+player.name+'</td><td align="right" class="sortnr">'+player.score+'</td></tr>');
-            index++;
           }
         });
         sortTable();
