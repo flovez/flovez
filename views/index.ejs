@@ -33,7 +33,7 @@
             $(".header").html("<h1>"+ currentPlayer.name+"</h1>");
 
             $("#board td").on('click', function () {
-              cell = getCellPosition($(this));
+              var cell = getCellPosition($(this));
               socket.emit('cell_click', cell, currentPlayer);
               return false;
             });
