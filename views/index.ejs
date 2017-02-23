@@ -31,7 +31,7 @@
             header.html("<h1>"+ currentPlayer.name+"</h1>");
             $(".cell").on('click', function () {
               var cell = getCellPosition($(this));
-              $("#"+cell.row+"_"+cell.col).fadeTo('fast', 0.1).fadeTo('fast', 1.0);
+              $(this).fadeTo('fast', 0.1).fadeTo('fast', 1.0);
               socket.emit('cell_click', cell, currentPlayer);
               return false;
             });
