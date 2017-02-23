@@ -1,3 +1,3 @@
 module.exports = {
-    boardSize: 8
+    boardSize: 4
 };
