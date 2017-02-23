@@ -37,25 +37,25 @@
               socket.emit('cell_click', cell, currentPlayer);
               return false;
             });
-
             updateLeadBoard(players);
           }
         });
 
         socket.on('cell_click', function(cell, player, players, board){
-          $("#"+cell.row+"_"+cell.col).css("background-color", player.team.color);
-          updateFruits(board);
+          updateBoard(board);
           updateLeadBoard(players);
         });
       }
 
-      function updateFruits(board){
+      function updateBoard(board){
         for(var i = 0; i < board.length; i++) {
           for(var j = 0; j < board.length; j++) {
+            var cell = $("#"+i+"_"+j);
+            cell.css("background-color", board[i][j].color);
             if(board[i][j].fruit === true){
-              $("#"+i+"_"+j).css('background-image', 'url("/images/fruits/'+board[i][j].fruitNumber+'.png")');
+              cell.css('background-image', 'url("/images/fruits/'+board[i][j].fruitNumber+'.png")');
             }else {
-              $("#"+i+"_"+j).css('background-image', '');
+              cell.css('background-image', '');
             }
           }
         }
@@ -112,7 +112,7 @@
         tableHtml += '</table>';
         $('.game-wrapper').html(tableHtml);
         $(".box").height($(document).height());
-        updateFruits(board);
+        updateBoard(board);
       }
 
     </script>

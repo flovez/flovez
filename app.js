@@ -80,6 +80,7 @@ var playerCount = 0;
 var board = [];
 var players = [];
 var playerName;
+var totalFruit = 0;
 
 
 for(var row = 0; row < boardConfig.boardSize; row ++){
@@ -111,7 +112,6 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('cell_click', function (cell, player) {
-
         if(board[cell.row][cell.col].fruit === true){
             temp = players[player.id];
             if(temp !== undefined){
@@ -123,12 +123,21 @@ io.sockets.on('connection', function (socket) {
                 players[player.id] = temp;
             }
             board[cell.row][cell.col].fruit = false;
+            //create new fruit
+            var col = randomIntFromInterval(0, boardConfig.boardSize -1);
+            var row = randomIntFromInterval(0, boardConfig.boardSize -1);
+            board[row][col].fruit = true;
+            board[row][col].fruitNumber = randomIntFromInterval(1, 7);
+            board[cell.row][cell.col].color = player.team.color;
         }
-        board[cell.row][cell.col].color = player.team.color;
-        var col = randomIntFromInterval(0, boardConfig.boardSize -1);
-        var row = randomIntFromInterval(0, boardConfig.boardSize -1);
-        board[row][col].fruit = true;
-        board[row][col].fruitNumber = randomIntFromInterval(1, 7);
+
+        if(totalFruit == 0){
+            var col = randomIntFromInterval(0, boardConfig.boardSize -1);
+            var row = randomIntFromInterval(0, boardConfig.boardSize -1);
+            board[row][col].fruit = true;
+            board[row][col].fruitNumber = randomIntFromInterval(1, 7);
+            totalFruit++;
+        }
 
         io.emit('cell_click', cell, player, players, board);
     });
