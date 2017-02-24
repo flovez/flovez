@@ -68,6 +68,7 @@ var board = [];
 var players = [];
 var playerName;
 var totalFruit = 0;
+var totalPumpkin = 0;
 
 
 for(var row = 0; row < boardConfig.boardSize; row ++){
@@ -76,7 +77,8 @@ for(var row = 0; row < boardConfig.boardSize; row ++){
         board[row][col]  = {
             color: "#000",
             fruit:false,
-            fruitNumber:0
+            fruitNumber:0,
+            pumpkin:false
         };
     }
 }
@@ -110,21 +112,48 @@ io.sockets.on('connection', function (socket) {
                 players[player.id] = temp;
             }
             board[cell.row][cell.col].fruit = false;
-            //create new fruit
+
             var col = randomIntFromInterval(0, boardConfig.boardSize -1);
             var row = randomIntFromInterval(0, boardConfig.boardSize -1);
-            board[row][col].fruit = true;
-            board[row][col].fruitNumber = randomIntFromInterval(1, 7);
+            if(randomIntFromInterval(1, 10) == 5){
+                board[row][col].pumpkin = true;
+                board[row][col].fruit = false;
+                totalFruit = 0;
+            }else {
+                board[row][col].pumpkin = false;
+                board[row][col].fruit = true;
+                board[row][col].fruitNumber = randomIntFromInterval(1, 10);
+            }
             board[cell.row][cell.col].color = player.color;
+        }else if(board[cell.row][cell.col].pumpkin === true){
+            temp = players[player.id];
+            if(temp !== undefined){
+                temp.score = 0;
+                players[player.id] = temp;
+            }
+            board[cell.row][cell.col].pumpkin = false;
+
+            var col = randomIntFromInterval(0, boardConfig.boardSize -1);
+            var row = randomIntFromInterval(0, boardConfig.boardSize -1);
+            if(randomIntFromInterval(1, 10) == 5){
+                board[row][col].pumpkin = true;
+                board[row][col].fruit = false;
+                totalFruit = 0;
+            }else {
+                board[row][col].pumpkin = false;
+                board[row][col].fruit = true;
+                board[row][col].fruitNumber = randomIntFromInterval(1, 10);
+            }
         }
 
         if(totalFruit == 0){
             var col = randomIntFromInterval(0, boardConfig.boardSize -1);
             var row = randomIntFromInterval(0, boardConfig.boardSize -1);
             board[row][col].fruit = true;
-            board[row][col].fruitNumber = randomIntFromInterval(1, 7);
+            board[row][col].fruitNumber = randomIntFromInterval(1, 10);
             totalFruit++;
         }
+
 
         io.emit('cell_click', cell, player, players, board);
     });

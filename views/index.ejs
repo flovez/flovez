@@ -52,6 +52,8 @@
             cell.css("background-color", board[i][j].color);
             if(board[i][j].fruit === true){
               cell.css('background-image', 'url("/images/fruits/'+board[i][j].fruitNumber+'.png")');
+            }else if(board[i][j].pumpkin === true){
+              cell.css('background-image', 'url("/images/pumpkin.png")');
             }else {
               cell.css('background-image', '');
             }
