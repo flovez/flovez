@@ -44,31 +44,18 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-var COLORS = {
-    "red": "#fd5c63",
-    "yellow": "#ffd900",
-    "blue": "#61b3de",
-    "black": "black"
-};
-
-var TEAMS = [
-    {
-        name: "Red Team",
-        color: COLORS.red
-    },
-    {
-        name: "Yellow Team",
-        color: COLORS.yellow
-    },
-    {
-        name: "Blue Team",
-        color: COLORS.blue
-    }
-];
-
 function randomIntFromInterval(min,max)
 {
     return Math.floor(Math.random()*(max-min+1)+min);
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
 }
 
 /**
@@ -87,7 +74,7 @@ for(var row = 0; row < boardConfig.boardSize; row ++){
     board[row] = [];
     for(var col = 0; col < boardConfig.boardSize; col ++){
         board[row][col]  = {
-            color:COLORS.black,
+            color: "#000",
             fruit:false,
             fruitNumber:0
         };
@@ -103,7 +90,7 @@ io.sockets.on('connection', function (socket) {
         var player = {
             "id": playerCount,
             "name": playerName,
-            "team": TEAMS[randomIntFromInterval(0, 2)],
+            "color": getRandomColor(),
             "score":0
         };
 
@@ -115,7 +102,7 @@ io.sockets.on('connection', function (socket) {
         if(board[cell.row][cell.col].fruit === true){
             temp = players[player.id];
             if(temp !== undefined){
-                if(board[cell.row][cell.col].color === player.team.color){
+                if(board[cell.row][cell.col].color === player.color){
                     temp.score = temp.score + 3;
                 }else {
                     temp.score++;
@@ -128,7 +115,7 @@ io.sockets.on('connection', function (socket) {
             var row = randomIntFromInterval(0, boardConfig.boardSize -1);
             board[row][col].fruit = true;
             board[row][col].fruitNumber = randomIntFromInterval(1, 7);
-            board[cell.row][cell.col].color = player.team.color;
+            board[cell.row][cell.col].color = player.color;
         }
 
         if(totalFruit == 0){

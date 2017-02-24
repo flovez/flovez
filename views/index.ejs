@@ -27,7 +27,7 @@
             currentPlayer = player;
             buildTable(boardConfig.boardSize, board);
             var header = $(".header");
-            header.css("color", currentPlayer.team.color);
+            header.css("color", currentPlayer.color);
             header.html("<h1>"+ currentPlayer.name+"</h1>");
             $(".cell").on('click', function () {
               var cell = getCellPosition($(this));
@@ -70,7 +70,7 @@
         $('#leadboard').empty();
         players.forEach(function(player){
           if(player !== null){
-            $('#leadboard').append('<tr><td style="color: '+player.team.color+'">'+player.name+'</td><td align="right" class="sortnr">'+player.score+'</td></tr>');
+            $('#leadboard').append('<tr><td style="color: '+player.color+'">'+player.name+'</td><td align="right" class="sortnr">'+player.score+'</td></tr>');
           }
         });
         sortTable();
