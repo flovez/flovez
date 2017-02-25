@@ -39,7 +39,7 @@
           }
         });
 
-        socket.on('cell_click', function(cell, player, players, board){
+        socket.on('after_cell_click', function(cell, player, players, board){
           updateBoard(board);
           updateLeadBoard(players);
         });

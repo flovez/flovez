@@ -124,7 +124,7 @@ io.sockets.on('connection', function (socket) {
             totalFruit++;
         }
 
-        io.emit('cell_click', cell, player, players, board);
+        io.emit('after_cell_click', cell, player, players, board);
     });
 
 });
