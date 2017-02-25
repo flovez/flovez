@@ -58,9 +58,6 @@ function getRandomColor() {
     return color;
 }
 
-/**
- * Create HTTP server.
- */
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 var playerCount = 0;
@@ -68,8 +65,6 @@ var board = [];
 var players = [];
 var playerName;
 var totalFruit = 0;
-var totalPumpkin = 0;
-
 
 for(var row = 0; row < boardConfig.boardSize; row ++){
     board[row] = [];
@@ -125,10 +120,7 @@ io.sockets.on('connection', function (socket) {
         }
 
         if(totalFruit == 0){
-            var col = randomIntFromInterval(0, boardConfig.boardSize -1);
-            var row = randomIntFromInterval(0, boardConfig.boardSize -1);
-            board[row][col].fruit = true;
-            board[row][col].fruitNumber = randomIntFromInterval(1, 10);
+            board = createFruitOnBoard(board);
             totalFruit++;
         }
 
@@ -140,7 +132,7 @@ io.sockets.on('connection', function (socket) {
 function createIteamOnBoard(board){
     var col = randomIntFromInterval(0, boardConfig.boardSize -1);
     var row = randomIntFromInterval(0, boardConfig.boardSize -1);
-    if(randomIntFromInterval(1, 10) == 5){
+    if(randomIntFromInterval(1, boardConfig.pumpkinIntensity) == 1){
         board[row][col].pumpkin = true;
         board[row][col].fruit = false;
         totalFruit = 0;
@@ -149,6 +141,15 @@ function createIteamOnBoard(board){
         board[row][col].fruit = true;
         board[row][col].fruitNumber = randomIntFromInterval(1, 10);
     }
+
+    return board;
+}
+
+function createFruitOnBoard(board){
+    var col = randomIntFromInterval(0, boardConfig.boardSize -1);
+    var row = randomIntFromInterval(0, boardConfig.boardSize -1);
+    board[row][col].fruit = true;
+    board[row][col].fruitNumber = randomIntFromInterval(1, 10);
 
     return board;
 }
