@@ -25,7 +25,6 @@
         socket.on('init', function(player, boardConfig, board, players){
           if(currentPlayer === null){
             currentPlayer = player;
-            initHeader(player);
             buildTable(boardConfig.boardSize, board);
             $(".cell").on('click', function () {
               var cell = getCellPosition($(this));
@@ -34,13 +33,14 @@
               return false;
             });
             updateLeadBoard(players);
+            initHeader(player);
           }
         });
 
         socket.on('after_cell_click', function(cell, player, players, board){
           updateBoard(board);
-          updateHeader(players[currentPlayer.id]);
           updateLeadBoard(players);
+          updateHeader(players[currentPlayer.id]);
         });
       }
 
@@ -48,10 +48,12 @@
         $(".color").css("background-color", player.color);
         $(".playername").html(player.name);
         $(".score").html(player.score);
+        $(".rank").html($("#player_"+player.id).html());
       }
 
       function updateHeader(player){
         $(".score").html(player.score);
+        $(".rank").html($("#player_"+player.id).html());
       }
 
       function updateBoard(board){
@@ -81,7 +83,7 @@
         $('#leadboard').empty();
         players.forEach(function(player){
           if(player !== null){
-            $('#leadboard').append('<tr><td width="5%" style="background-color: '+player.color+'"></td><td>'+player.name+'</td><td align="right" class="sortnr">'+player.score+'</td></tr>');
+            $('#leadboard').append('<tr><td id="player_'+player.id+'" width="5%" style="background-color: '+player.color+'"></td><td>'+player.name+'</td><td align="right" class="sortnr">'+player.score+'</td></tr>');
           }
         });
         sortTable();
@@ -99,7 +101,9 @@
           return y[0] - x[0];
         });
         for(var i=0, len=store.length; i<len; i++){
-          tbl.appendChild(store[i][1]);
+          var currentRow = store[i][1];
+          currentRow.cells[0].innerText = i+1;
+          tbl.appendChild(currentRow);
         }
         store = null;
       }
@@ -130,7 +134,10 @@
           <tr>
             <td class="color" width="5%"></td>
             <td class="playername"></td>
-            <td class="score" align="right"></td>
+            <td width="5%" class="header-score" >Score:</td>
+            <td width="10%" class="score header-score" ></td>
+            <td width="5%" class="header-rank" >Rank:</td>
+            <td width="10%" class="rank header-rank" ></td>
           </tr>
         </table>
       </div>

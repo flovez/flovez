@@ -34,3 +34,11 @@
 .header-table{
   margin-bottom: 0px !important;
 }
+
+.header-rank{
+  color: #ffdd00;;
+}
+
+.header-score{
+  color: #00f000;
+}
