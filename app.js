@@ -124,6 +124,8 @@ io.sockets.on('connection', function (socket) {
             totalFruit++;
         }
 
+        player = players[player.id];
+
         io.emit('after_cell_click', cell, player, players, board);
     });
 
