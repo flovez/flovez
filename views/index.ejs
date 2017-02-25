@@ -57,12 +57,11 @@
         var previousRank = rank.html();
         var newRank = $("#player_"+player.id).html();
 
+        var rankChange = $(".rank-change");
         if(parseInt(newRank)<parseInt(previousRank)){
-          $(".rank-change").css('background-image', 'url("/images/rank/up.png")');
+          rankChange.css('background-image', 'url("/images/rank/up.png")');
         }else if(parseInt(newRank)>parseInt(previousRank)){
-          $(".rank-change").css('background-image', 'url("/images/rank/down.png")');
-        }else {
-          $(".rank-change").css('background-image', '');
+          rankChange.css('background-image', 'url("/images/rank/down.png")');
         }
         rank.html(newRank);
       }
@@ -145,11 +144,14 @@
           <tr>
             <td class="color" width="5%"></td>
             <td class="playername"></td>
+          </tr>
+          <tr>
+            <td width="5%" align="right" class="rank-change" ></td>
+            <td></td>
             <td width="5%" class="header-score" >Score:</td>
             <td width="10%" class="score header-score" ></td>
-            <td width="5%" class="header-rank" >Rank:</td>
-            <td width="10%" class="rank header-rank" ></td>
-            <td width="5%" class="rank-change" ></td>
+            <td width="5%"  class="header-rank" >Rank:</td>
+            <td width="10%"  class="rank header-rank" ></td>
           </tr>
         </table>
       </div>
