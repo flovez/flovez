@@ -42,3 +42,9 @@
 .header-score{
   color: #00f000;
 }
+
+.rank-change{
+  background-size:50% 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+}

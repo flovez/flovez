@@ -53,7 +53,18 @@
 
       function updateHeader(player){
         $(".score").html(player.score);
-        $(".rank").html($("#player_"+player.id).html());
+        var rank = $(".rank");
+        var previousRank = rank.html();
+        var newRank = $("#player_"+player.id).html();
+
+        if(parseInt(newRank)<parseInt(previousRank)){
+          $(".rank-change").css('background-image', 'url("/images/rank/up.png")');
+        }else if(parseInt(newRank)>parseInt(previousRank)){
+          $(".rank-change").css('background-image', 'url("/images/rank/down.png")');
+        }else {
+          $(".rank-change").css('background-image', '');
+        }
+        rank.html(newRank);
       }
 
       function updateBoard(board){
@@ -128,7 +139,7 @@
 
   </head>
   <body>
-    <div class="container-full" align="center">
+  <div class="container-full" align="center">
       <div class="header">
         <table class="table table-inverse header-table">
           <tr>
@@ -138,6 +149,7 @@
             <td width="10%" class="score header-score" ></td>
             <td width="5%" class="header-rank" >Rank:</td>
             <td width="10%" class="rank header-rank" ></td>
+            <td width="5%" class="rank-change" ></td>
           </tr>
         </table>
       </div>
