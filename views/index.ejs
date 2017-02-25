@@ -130,7 +130,7 @@
         }
         tableHtml += '</table>';
         $('.game-wrapper').html(tableHtml);
-        $(".box").height($(document).height() - $(".header").height() - 20);
+        $(".box").height($(document).height() - $(".header").height());
         updateBoard(board);
       }
 
@@ -142,12 +142,7 @@
       <div class="header">
         <table class="table table-inverse header-table">
           <tr>
-            <td class="color" width="5%"></td>
-            <td class="playername"></td>
-          </tr>
-        </table>
-        <table class="table table-inverse header-table">
-          <tr>
+            <td class="color" width="50%" ></td>
             <td></td>
             <td width="5%" class="header-score" >Score:</td>
             <td width="10%" class="score header-score" ></td>
