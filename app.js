@@ -112,18 +112,7 @@ io.sockets.on('connection', function (socket) {
                 players[player.id] = temp;
             }
             board[cell.row][cell.col].fruit = false;
-
-            var col = randomIntFromInterval(0, boardConfig.boardSize -1);
-            var row = randomIntFromInterval(0, boardConfig.boardSize -1);
-            if(randomIntFromInterval(1, 10) == 5){
-                board[row][col].pumpkin = true;
-                board[row][col].fruit = false;
-                totalFruit = 0;
-            }else {
-                board[row][col].pumpkin = false;
-                board[row][col].fruit = true;
-                board[row][col].fruitNumber = randomIntFromInterval(1, 10);
-            }
+            board = createIteamOnBoard(board);
             board[cell.row][cell.col].color = player.color;
         }else if(board[cell.row][cell.col].pumpkin === true){
             temp = players[player.id];
@@ -132,18 +121,7 @@ io.sockets.on('connection', function (socket) {
                 players[player.id] = temp;
             }
             board[cell.row][cell.col].pumpkin = false;
-
-            var col = randomIntFromInterval(0, boardConfig.boardSize -1);
-            var row = randomIntFromInterval(0, boardConfig.boardSize -1);
-            if(randomIntFromInterval(1, 10) == 5){
-                board[row][col].pumpkin = true;
-                board[row][col].fruit = false;
-                totalFruit = 0;
-            }else {
-                board[row][col].pumpkin = false;
-                board[row][col].fruit = true;
-                board[row][col].fruitNumber = randomIntFromInterval(1, 10);
-            }
+            board = createIteamOnBoard(board);
         }
 
         if(totalFruit == 0){
@@ -154,11 +132,26 @@ io.sockets.on('connection', function (socket) {
             totalFruit++;
         }
 
-
         io.emit('cell_click', cell, player, players, board);
     });
 
 });
+
+function createIteamOnBoard(board){
+    var col = randomIntFromInterval(0, boardConfig.boardSize -1);
+    var row = randomIntFromInterval(0, boardConfig.boardSize -1);
+    if(randomIntFromInterval(1, 10) == 5){
+        board[row][col].pumpkin = true;
+        board[row][col].fruit = false;
+        totalFruit = 0;
+    }else {
+        board[row][col].pumpkin = false;
+        board[row][col].fruit = true;
+        board[row][col].fruitNumber = randomIntFromInterval(1, 10);
+    }
+
+    return board;
+}
 
 module.exports = {
     "app": app,
