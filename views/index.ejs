@@ -38,9 +38,8 @@
         });
 
         socket.on('after_cell_click', function(cell, player, players, board){
-          currentPlayer = player;
           updateBoard(board);
-          updateHeader(player);
+          updateHeader(players[currentPlayer.id]);
           updateLeadBoard(players);
         });
       }
