@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var game = require("../config/game");
 
 /* GET home page. */
 router.post('/', function(req, res, next) {
@@ -11,7 +12,7 @@ router.post('/', function(req, res, next) {
     res.end();
   }
 
-  res.render('index', {"username": req.body.username});
+  res.render('index', {"username": req.body.username, "game": game});
 });
 
 function isBlank(str) {
