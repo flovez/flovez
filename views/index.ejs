@@ -25,10 +25,8 @@
         socket.on('init', function(player, boardConfig, board, players){
           if(currentPlayer === null){
             currentPlayer = player;
+            updateHeader(player);
             buildTable(boardConfig.boardSize, board);
-            var header = $(".header");
-            header.css("color", currentPlayer.color);
-            header.html("<h1>"+ currentPlayer.name+"</h1>");
             $(".cell").on('click', function () {
               var cell = getCellPosition($(this));
               $(this).fadeTo('fast', 0.1).fadeTo('fast', 1.0);
@@ -43,6 +41,12 @@
           updateBoard(board);
           updateLeadBoard(players);
         });
+      }
+
+      function updateHeader(player){
+        var header = $(".header");
+        header.css("color", player.color);
+        header.html("<h1>"+ player.name+"</h1>");
       }
 
       function updateBoard(board){
@@ -107,7 +111,7 @@
         }
         tableHtml += '</table>';
         $('.game-wrapper').html(tableHtml);
-        $(".box").height($(document).height());
+        $(".box").height($(document).height() - $(".header").height());
         updateBoard(board);
       }
 
@@ -116,17 +120,13 @@
   </head>
   <body>
     <div class="container-full" align="center">
-      <div class="game-wrapper"></div>
-
-      <hr/>
       <div class="header"></div>
+      <div class="game-wrapper"></div>
+      <hr/>
       <div class="leadboard" align="center">
-        <h2>Leadboard</h2>
         <table class="table table-inverse" id="leadboard">
         </table>
       </div>
-
-
     </div>
   </body>
 </html>
