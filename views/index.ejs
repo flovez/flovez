@@ -81,7 +81,7 @@
         $('#leadboard').empty();
         players.forEach(function(player){
           if(player !== null){
-            $('#leadboard').append('<tr><td style="color: '+player.color+'">'+player.name+'</td><td align="right" class="sortnr">'+player.score+'</td></tr>');
+            $('#leadboard').append('<tr><td width="5%" style="background-color: '+player.color+'"></td><td>'+player.name+'</td><td align="right" class="sortnr">'+player.score+'</td></tr>');
           }
         });
         sortTable();
@@ -92,7 +92,7 @@
         var store = [];
         for(var i=0, len=tbl.rows.length; i<len; i++){
           var row = tbl.rows[i];
-          var sortnr = parseFloat(row.cells[1].textContent || row.cells[1].innerText);
+          var sortnr = parseFloat(row.cells[2].textContent || row.cells[2].innerText);
           if(!isNaN(sortnr)) store.push([sortnr, row]);
         }
         store.sort(function(x,y){
