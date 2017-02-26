@@ -65,6 +65,7 @@ var board = [];
 var players = [];
 var playerName;
 var fruitExists = false;
+var diffs = [];
 
 for(var row = 0; row < boardConfig.boardSize; row ++){
     board[row] = [];
@@ -96,6 +97,9 @@ io.sockets.on('connection', function (socket) {
     });
 
     socket.on('cell_click', function (cell, player) {
+
+        diffs = [];
+
         if(board[cell.row][cell.col].fruit === true){
             temp = players[player.id];
             if(temp !== undefined){
@@ -103,9 +107,17 @@ io.sockets.on('connection', function (socket) {
                     temp.score = temp.score + 3;
                 }else {
                     temp.score++;
+                    diffs.push(
+                        {row: cell.row, col: cell.col, action: "change_color", color: player.color}
+                    );
                 }
                 players[player.id] = temp;
             }
+
+            diffs.push(
+                {row: cell.row, col: cell.col, action: "remove_item"}
+            );
+
             board[cell.row][cell.col].fruit = false;
             board = createIteamOnBoard(board);
             board[cell.row][cell.col].color = player.color;
@@ -116,6 +128,11 @@ io.sockets.on('connection', function (socket) {
                 players[player.id] = temp;
             }
             board[cell.row][cell.col].pumpkin = false;
+
+            diffs.push(
+                {row: cell.row, col: cell.col, action: "remove_item"}
+            );
+
             board = createIteamOnBoard(board);
         }
 
@@ -126,7 +143,7 @@ io.sockets.on('connection', function (socket) {
 
         player = players[player.id];
 
-        io.emit('after_cell_click', cell, player, players, board);
+        io.emit('after_cell_click', cell, player, players, board, diffs);
     });
 
 });
@@ -137,10 +154,12 @@ function createIteamOnBoard(board){
     if(randomIntFromInterval(1, boardConfig.pumpkinIntensity) == 1 && board[row][col].fruit === false){
         board[row][col].pumpkin = true;
         fruitExists = false;
+        diffs.push({row: row, col: col, action: "create_pumpkin"});
     }else if(board[row][col].fruit === false){
         board[row][col].pumpkin = false;
         board[row][col].fruit = true;
         board[row][col].fruitNumber = randomIntFromInterval(1, 10);
+        diffs.push({row: row, col: col, action: "create_fruit", fruitNumber: board[row][col].fruitNumber});
     }
 
     return board;
@@ -151,6 +170,7 @@ function createFirstFruit(board){
     var row = randomIntFromInterval(0, boardConfig.boardSize -1);
     board[row][col].fruit = true;
     board[row][col].fruitNumber = randomIntFromInterval(1, 10);
+    diffs.push({row: row, col: col, action: "create_fruit", fruitNumber: board[row][col].fruitNumber});
     return board;
 }
 
