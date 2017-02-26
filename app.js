@@ -64,7 +64,7 @@ var playerCount = 0;
 var board = [];
 var players = [];
 var playerName;
-var totalFruit = 0;
+var fruitExists = false;
 
 for(var row = 0; row < boardConfig.boardSize; row ++){
     board[row] = [];
@@ -119,9 +119,9 @@ io.sockets.on('connection', function (socket) {
             board = createIteamOnBoard(board);
         }
 
-        if(totalFruit == 0){
-            board = createFruitOnBoard(board);
-            totalFruit++;
+        if(fruitExists === false){
+            board = createFirstFruit(board);
+            fruitExists = true;
         }
 
         player = players[player.id];
@@ -134,11 +134,10 @@ io.sockets.on('connection', function (socket) {
 function createIteamOnBoard(board){
     var col = randomIntFromInterval(0, boardConfig.boardSize -1);
     var row = randomIntFromInterval(0, boardConfig.boardSize -1);
-    if(randomIntFromInterval(1, boardConfig.pumpkinIntensity) == 1){
+    if(randomIntFromInterval(1, boardConfig.pumpkinIntensity) == 1 && board[row][col].fruit === false){
         board[row][col].pumpkin = true;
-        board[row][col].fruit = false;
-        totalFruit = 0;
-    }else {
+        fruitExists = false;
+    }else if(board[row][col].fruit === false){
         board[row][col].pumpkin = false;
         board[row][col].fruit = true;
         board[row][col].fruitNumber = randomIntFromInterval(1, 10);
@@ -147,12 +146,11 @@ function createIteamOnBoard(board){
     return board;
 }
 
-function createFruitOnBoard(board){
+function createFirstFruit(board){
     var col = randomIntFromInterval(0, boardConfig.boardSize -1);
     var row = randomIntFromInterval(0, boardConfig.boardSize -1);
     board[row][col].fruit = true;
     board[row][col].fruitNumber = randomIntFromInterval(1, 10);
-
     return board;
 }
 
