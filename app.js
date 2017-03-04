@@ -66,6 +66,7 @@ var players = [];
 var playerName;
 var fruitExists = false;
 var diffs = [];
+var tokens = [];
 
 for(var row = 0; row < boardConfig.boardSize; row ++){
     board[row] = [];
@@ -83,7 +84,6 @@ io.sockets.on('connection', function (socket) {
 
     socket.on('start', function (username) {
         playerName = username.slice(0, 15);
-        playerCount++;
         console.log('Total ' + playerCount + ' connected!');
         var player = {
             "id": playerCount,
@@ -91,12 +91,48 @@ io.sockets.on('connection', function (socket) {
             "color": getRandomColor(),
             "score":0
         };
-
         players[player.id] = player;
+        var token = makeid();
+        tokens[player.id] = token;
+        player.token = token;
+        playerCount++;
         io.emit('init', player, boardConfig, board, players);
     });
 
     socket.on('cell_click', function (cell, player) {
+
+        if(!isObject(player)){
+            console.log("player is not an object");
+            return false;
+        }
+
+        if(!isInt(player.id)){
+            console.log("player id is not an integer");
+            return false;
+        }
+
+        if(players[player.id] === null){
+            console.log("player not found");
+            return false;
+        }
+
+        console.log(tokens);
+        if(player.token !== tokens[player.id]){
+            console.log("invalid token");
+            return false;
+        }
+
+        if(!isObject(cell)){
+            console.log("cell is not an object");
+            return false;
+        }
+
+        if(!isInt(cell.row) || !isInt(cell.col)){
+            console.log("invalid cell");
+            return false;
+        }
+
+        player = players[player.id];
 
         diffs = [];
 
@@ -172,6 +208,30 @@ function createFirstFruit(board){
     board[row][col].fruitNumber = randomIntFromInterval(1, 10);
     diffs.push({row: row, col: col, action: "create_fruit", fruitNumber: board[row][col].fruitNumber});
     return board;
+}
+
+function makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 20; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+}
+
+function isInt(value) {
+    var x;
+    if (isNaN(value)) {
+        return false;
+    }
+    x = parseFloat(value);
+    return (x | 0) === x;
+}
+
+function isObject(a) {
+    return (!!a) && (a.constructor === Object);
 }
 
 module.exports = {
