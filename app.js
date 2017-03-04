@@ -115,8 +115,7 @@ io.sockets.on('connection', function (socket) {
             console.log("player not found");
             return false;
         }
-
-        console.log(tokens);
+        
         if(player.token !== tokens[player.id]){
             console.log("invalid token");
             return false;
