@@ -103,6 +103,7 @@ io.sockets.on('connection', function (socket) {
             if (addMinutes(tempPlayer.last_activity, 1) < new Date()) {
                 delete players["p_"+tempPlayer.id];
                 delete tokens["t_"+tempPlayer.id];
+                io.emit('close', tempPlayer);
             }
         }
 
@@ -147,6 +148,10 @@ io.sockets.on('connection', function (socket) {
         }
 
         player = players["p_"+player.id];
+
+        //update last_activity
+        player.last_activity = new Date();
+        players["p_"+player.id] = player;
 
         diffs = [];
 

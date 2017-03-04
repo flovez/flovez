@@ -44,6 +44,13 @@
           updateLeadBoard(players);
           updateHeader(player);
         });
+
+        socket.on('close', function(player){
+          if(currentPlayer !== null && currentPlayer.id === player.id){
+            alert("You are disconnected from server");
+            window.location.replace("/");
+          }
+        });
       }
 
       function initHeader(player){
