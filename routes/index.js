@@ -12,11 +12,22 @@ router.post('/', function(req, res, next) {
     res.end();
   }
 
-  res.render('index', {"username": req.body.username, "game": game});
+  res.render('index', {"username": req.body.username, "game": game, "token": makeid()});
 });
 
 function isBlank(str) {
   return (!str || /^\s*$/.test(str));
+}
+
+function makeid()
+{
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for( var i=0; i < 20; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
 }
 
 module.exports = router;

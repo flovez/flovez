@@ -62,7 +62,7 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 var playerCount = 0;
 var board = [];
-var players = [];
+var players = {};
 var playerName;
 var fruitExists = false;
 var diffs = [];
@@ -82,24 +82,39 @@ for(var row = 0; row < boardConfig.boardSize; row ++){
 
 io.sockets.on('connection', function (socket) {
 
-    socket.on('start', function (username) {
+    socket.on('start', function (username, token) {
         playerName = username.slice(0, 15);
         console.log('Total ' + playerCount + ' connected!');
         var player = {
             "id": playerCount,
             "name": playerName,
             "color": getRandomColor(),
-            "score":0
+            "score":0,
+            "last_activity": new Date()
         };
-        players[player.id] = player;
-        var token = makeid();
-        tokens[player.id] = token;
-        player.token = token;
+
+        players["p_"+playerCount] = player;
+        tokens["t_"+playerCount] = token;
         playerCount++;
+
+        //remove inactive players
+        for (var key in players) {
+            var tempPlayer = players[key];
+            if (addMinutes(tempPlayer.last_activity, 1) < new Date()) {
+                delete players["p_"+tempPlayer.id];
+                delete tokens["t_"+tempPlayer.id];
+            }
+        }
+
         io.emit('init', player, boardConfig, board, players);
     });
 
-    socket.on('cell_click', function (cell, player) {
+    socket.on('cell_click', function (cell, player, token) {
+
+        if(token === null){
+            console.log("token is null");
+            return false;
+        }
 
         if(!isObject(player)){
             console.log("player is not an object");
@@ -111,12 +126,12 @@ io.sockets.on('connection', function (socket) {
             return false;
         }
 
-        if(players[player.id] === null){
+        if(players["p_"+player.id] === null){
             console.log("player not found");
             return false;
         }
-        
-        if(player.token !== tokens[player.id]){
+
+        if(token !== tokens["t_"+player.id]){
             console.log("invalid token");
             return false;
         }
@@ -131,12 +146,12 @@ io.sockets.on('connection', function (socket) {
             return false;
         }
 
-        player = players[player.id];
+        player = players["p_"+player.id];
 
         diffs = [];
 
         if(board[cell.row][cell.col].fruit === true){
-            temp = players[player.id];
+            temp = players["p_"+player.id];
             if(temp !== undefined){
                 if(board[cell.row][cell.col].color === player.color){
                     temp.score = temp.score + 3;
@@ -146,7 +161,7 @@ io.sockets.on('connection', function (socket) {
                         {row: cell.row, col: cell.col, action: "change_color", color: player.color}
                     );
                 }
-                players[player.id] = temp;
+                players["p_"+player.id] = temp;
             }
 
             diffs.push(
@@ -157,10 +172,10 @@ io.sockets.on('connection', function (socket) {
             board = createIteamOnBoard(board);
             board[cell.row][cell.col].color = player.color;
         }else if(board[cell.row][cell.col].pumpkin === true){
-            temp = players[player.id];
+            temp = players["p_"+player.id];
             if(temp !== undefined){
                 temp.score = 0;
-                players[player.id] = temp;
+                players["p_"+player.id] = temp;
             }
             board[cell.row][cell.col].pumpkin = false;
 
@@ -176,9 +191,8 @@ io.sockets.on('connection', function (socket) {
             fruitExists = true;
         }
 
-        player = players[player.id];
-
-        io.emit('after_cell_click', cell, player, players, board, diffs);
+        player = players["p_"+player.id];
+        io.emit('after_cell_click', player, players, board, diffs);
     });
 
 });
@@ -231,6 +245,10 @@ function isInt(value) {
 
 function isObject(a) {
     return (!!a) && (a.constructor === Object);
+}
+
+function addMinutes(date, minutes) {
+    return new Date(date.getTime() + minutes*60000);
 }
 
 module.exports = {

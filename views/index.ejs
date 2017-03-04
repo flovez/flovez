@@ -15,10 +15,11 @@
 
       var socket = io();
       var currentPlayer = null;
-      var allPlayers = null;
+      var token = null;
 
       $(document).ready(function () {
-        socket.emit('start', "<%= username%>");
+        socket.emit('start', "<%= username %>", "<%= token %>");
+        token = "<%= token %>";
         registerEvents();
       });
 
@@ -30,7 +31,7 @@
             $(".cell").on('click', function () {
               var cell = getCellPosition($(this));
               $(this).fadeTo('fast', 0.1).fadeTo('fast', 1.0);
-              socket.emit('cell_click', cell, currentPlayer);
+              socket.emit('cell_click', cell, currentPlayer, token);
               return false;
             });
             updateLeadBoard(players);
@@ -38,10 +39,10 @@
           }
         });
 
-        socket.on('after_cell_click', function(cell, player, players, board, diffs){
+        socket.on('after_cell_click', function(player, players, board, diffs){
           updateBoard(board, diffs);
           updateLeadBoard(players);
-          updateHeader(players[currentPlayer.id]);
+          updateHeader(player);
         });
       }
 
@@ -114,11 +115,13 @@
 
       function updateLeadBoard(players){
         $('#leadboard').empty();
-        players.forEach(function(player){
+
+        for (var key in players) {
+          var player = players[key];
           if(player !== null){
             $('#leadboard').append('<tr><td id="player_'+player.id+'" width="5%" style="background-color: '+player.color+'"></td><td>'+player.name+'</td><td align="right" class="sortnr">'+player.score+'</td></tr>');
           }
-        });
+        }
         sortTable();
       }
 
