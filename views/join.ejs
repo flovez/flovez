@@ -2,11 +2,36 @@
 <html lang="en">
 <head>
     <style>
+        .logo{
+            color: #00f000;
+        }
+        .dark{
+            background-color: #000000;
+        }
+
         .central {
             float: none;
             margin-left: auto;
             margin-right: auto;
         }
+        .btn-custom {
+            background-color: hsl(165, 93%, 48%) !important;
+            background-repeat: repeat-x;
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e1fdf6", endColorstr="#08ecb3");
+            background-image: -khtml-gradient(linear, left top, left bottom, from(#e1fdf6), to(#08ecb3));
+            background-image: -moz-linear-gradient(top, #e1fdf6, #08ecb3);
+            background-image: -ms-linear-gradient(top, #e1fdf6, #08ecb3);
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e1fdf6), color-stop(100%, #08ecb3));
+            background-image: -webkit-linear-gradient(top, #e1fdf6, #08ecb3);
+            background-image: -o-linear-gradient(top, #e1fdf6, #08ecb3);
+            background-image: linear-gradient(#e1fdf6, #08ecb3);
+            border-color: #08ecb3 #08ecb3 hsl(165, 93%, 36.5%);
+            color: #333 !important;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+            -webkit-font-smoothing: antialiased;
+        }
+
+
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -19,17 +44,17 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="dark">
     <div class="container" align="center">
         <div class="row">
             <div class="central">
-                <h1><%= game.name %></h1>
+                <h1 class="logo"><%= game.name %></h1>
                 <form class="form-inline" action="/play" method="post">
                     <div class="form-group">
 
                         <input type="text" class="form-control" name="username" placeholder="Nick">
                     </div>
-                    <button type="submit" class="btn btn-default">Play</button>
+                    <button type="submit" class="btn btn-custom">Play</button>
                 </form>
             </div>
         </div>
