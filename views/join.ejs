@@ -2,43 +2,54 @@
 <html lang="en">
 <head>
     <style>
-        .nick{
-            width:80%!important;
-            color: #55f034 !important;
-            background-color: #333333!important;
-            text-align: center;
-        }
-        .logo{
-            color: #00f000;
-        }
-        .dark{
-            background-color: #000000;
+
+        .wrapper {
+            margin-top: 80px;
+            margin-bottom: 20px;
         }
 
-        .central {
-            float: none;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .btn-custom {
-            width: 80%!important;
-            background-color: hsl(165, 93%, 48%) !important;
-            background-repeat: repeat-x;
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e1fdf6", endColorstr="#08ecb3");
-            background-image: -khtml-gradient(linear, left top, left bottom, from(#e1fdf6), to(#08ecb3));
-            background-image: -moz-linear-gradient(top, #e1fdf6, #08ecb3);
-            background-image: -ms-linear-gradient(top, #e1fdf6, #08ecb3);
-            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e1fdf6), color-stop(100%, #08ecb3));
-            background-image: -webkit-linear-gradient(top, #e1fdf6, #08ecb3);
-            background-image: -o-linear-gradient(top, #e1fdf6, #08ecb3);
-            background-image: linear-gradient(#e1fdf6, #08ecb3);
-            border-color: #08ecb3 #08ecb3 hsl(165, 93%, 36.5%);
-            color: #333 !important;
-            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
-            -webkit-font-smoothing: antialiased;
+        .form-signin {
+            max-width: 420px;
+            padding: 30px 38px 66px;
+            margin: 0 auto;
+            background-color: #eee;
+            border: 3px dotted rgba(0,0,0,0.1);
         }
 
+        .form-signin-heading {
+            text-align:center;
+            margin-bottom: 30px;
+        }
 
+        .form-control {
+            position: relative;
+            font-size: 16px;
+            height: auto;
+            padding: 10px;
+        }
+
+        input[type="text"] {
+            margin-bottom: 20px;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        input[type="password"] {
+            margin-bottom: 20px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .colorgraph {
+            height: 7px;
+            border-top: 0;
+            background: #c4e17f;
+            border-radius: 5px;
+            background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+            background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+            background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+            background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+        }
     </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -51,19 +62,17 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
-<body class="dark">
-    <div class="container" align="center">
-        <div class="row">
-            <div class="central">
-                <h1 class="logo"><%= game.name %></h1>
-                <form class="form-inline" action="/play" method="post">
-                    <div class="form-group">
+<body>
+    <div class = "container">
+        <div class="wrapper">
+            <form action="/play" method="post" name="Login_Form" class="form-signin">
+                <h3 class="form-signin-heading">FastFruit</h3>
+                <hr class="colorgraph"><br>
 
-                        <input type="text" class="form-control nick" name="username" placeholder="Nick">
-                    </div>
-                    <button type="submit" class="btn btn-custom btn-responsive">Play</button>
-                </form>
-            </div>
+                <input type="text" class="form-control" name="username" placeholder="Nick" required="" autofocus="" />
+
+                <button class="btn btn-lg btn-success btn-block"  name="Submit" value="Play" type="Submit">Play</button>
+            </form>
         </div>
     </div>
 </body>
