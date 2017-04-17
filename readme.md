@@ -1,7 +1,8 @@
 Flovez
 ======
 
-### Demo: http://flovez.com
+### Demo: [flovez.com](http://flovez.com)
+
 
 ### Run with following command
 
