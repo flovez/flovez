@@ -1,8 +1,8 @@
-Square Game
-===========
+Flovez
+======
 
 Run with following command
 
 ``
-DEBUG=squaregame:* npm start
+node bin/www
 ``
