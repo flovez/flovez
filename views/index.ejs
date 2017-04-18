@@ -42,7 +42,10 @@
         socket.on('after_cell_click', function(player, players, board, diffs){
           updateBoard(board, diffs);
           updateLeadBoard(players);
-          updateHeader(players["p_"+currentPlayer.id]);
+          while(players["p_"+currentPlayer.id] == null){
+            updateHeader(players["p_"+currentPlayer.id]);
+          }
+
         });
 
         socket.on('close', function(player){
