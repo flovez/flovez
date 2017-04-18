@@ -40,12 +40,11 @@
         });
 
         socket.on('after_cell_click', function(player, players, board, diffs){
-          updateBoard(board, diffs);
-          updateLeadBoard(players);
-          while(players["p_"+currentPlayer.id] == null){
+          if(currentPlayer !== null){
+            updateBoard(board, diffs);
+            updateLeadBoard(players);
             updateHeader(players["p_"+currentPlayer.id]);
           }
-
         });
 
         socket.on('close', function(player){
@@ -156,15 +155,6 @@
 
 
       function buildTable(size, board) {
-
-        console.log("Building table");
-        console.log(size);
-        console.log(board);
-
-        if(board == null){
-          buildTable(size, board);
-        }
-
         var tableHtml = '<table class="box" cellpadding="0" cellspacing="0" id="board">';
         for (row = 0; row < size; row++) {
           tableHtml += '<tr>';
