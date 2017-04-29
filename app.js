@@ -9,6 +9,7 @@ var join = require('./routes/join');
 var app = express();
 var http = require('http');
 var boardConfig = require("./config/board.js");
+var gameConfig = require("./config/game.js");
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -100,7 +101,7 @@ io.sockets.on('connection', function (socket) {
         //remove inactive players
         for (var key in players) {
             var tempPlayer = players[key];
-            if (addMinutes(tempPlayer.last_activity, 1) < new Date()) {
+            if (addMinutes(tempPlayer.last_activity, gameConfig.disconnect_duration) < new Date()) {
                 delete players["p_"+tempPlayer.id];
                 delete tokens["t_"+tempPlayer.id];
                 io.emit('close', tempPlayer);
@@ -149,7 +150,10 @@ io.sockets.on('connection', function (socket) {
 
         player = players["p_"+player.id];
 
-        //update last_activity
+        if(addMilliseconds(player.last_activity, gameConfig.max_allowed_speed) > new Date()){
+            return false;
+        }
+
         player.last_activity = new Date();
         players["p_"+player.id] = player;
 
@@ -254,6 +258,10 @@ function isObject(a) {
 
 function addMinutes(date, minutes) {
     return new Date(date.getTime() + minutes*60000);
+}
+
+function addMilliseconds(date, milliseconds) {
+    return new Date(date.getTime() + milliseconds);
 }
 
 module.exports = {
