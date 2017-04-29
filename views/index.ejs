@@ -16,6 +16,7 @@
       var socket = io();
       var currentPlayer = null;
       var token = null;
+      var currentBoard = null;
 
       $(document).ready(function () {
         socket.emit('start', "<%= username %>", "<%= token %>");
@@ -25,13 +26,21 @@
 
       function registerEvents() {
         socket.on('init', function(player, boardConfig, board, players){
+
+          if(currentBoard === null){
+            currentBoard = board;
+          }
+
           if(currentPlayer === null){
             currentPlayer = player;
             buildTable(boardConfig.boardSize, board);
             $(".cell").on('click', function () {
               var cell = getCellPosition($(this));
-              $(this).fadeTo('fast', 0.1).fadeTo('fast', 1.0);
-              socket.emit('cell_click', cell, currentPlayer, token);
+
+              if(currentBoard[cell.row][cell.col].fruit === true || currentBoard[cell.row][cell.col].pumpkin === true){
+                $(this).fadeTo('fast', 0.1).fadeTo('fast', 1.0);
+                socket.emit('cell_click', cell, currentPlayer, token);
+              }
               return false;
             });
             updateLeadBoard(players);
@@ -40,6 +49,7 @@
         });
 
         socket.on('after_cell_click', function(player, players, board, diffs){
+          currentBoard = board;
           if(currentPlayer !== null){
             updateBoard(board, diffs);
             updateLeadBoard(players);

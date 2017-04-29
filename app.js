@@ -108,10 +108,17 @@ io.sockets.on('connection', function (socket) {
             }
         }
 
+        if(fruitExists === false){
+            board = createFirstFruit(board);
+            fruitExists = true;
+        }
+
         io.emit('init', player, boardConfig, board, players);
     });
 
     socket.on('cell_click', function (cell, player, token) {
+
+        console.log(player.name+" is clicked");
 
         if(token === null){
             console.log("token is null");
